@@ -1,0 +1,10 @@
+<%- include('../partials/header') %>
+<h1>Chi tiết Sản phẩm</h1>
+<p><b>Tên:</b> <%= product.name %></p>
+<p><b>Địa chỉ:</b> <%= product.address %></p>
+<p><b>SĐT:</b> <%= product.phone %></p>
+<p><b>Nhà cung cấp:</b> <%= product.supplierId ? product.supplierId.name : 'N/A' %></p>
+
+<a href="/products">⬅️ Quay lại danh sách</a>
+<%- include('../partials/footer') %>
+ 

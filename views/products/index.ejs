@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<h1>Danh sách Sản phẩm</h1>
+<a href="/products/new">➕ Thêm sản phẩm</a>
+<table border="1" cellpadding="6">
+  <thead>
+    <tr>
+      <th>Tên</th><th>Địa chỉ</th><th>Phone</th><th>Nhà cung cấp</th><th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% products.forEach(p => { %>
+      <tr>
+        <td><a href="/products/<%= p._id %>"><%= p.name %></a></td>
+        <td><%= p.address %></td>
+        <td><%= p.phone %></td>
+        <td><%= p.supplierId ? p.supplierId.name : 'N/A' %></td>
+        <td>
+          <a href="/products/<%= p._id %>/edit">✏️ Sửa</a>
+          <form action="/products/<%= p._id %>?_method=DELETE" method="POST" style="display:inline">
+            <button type="submit" onclick="return confirm('Bạn có chắc muốn xóa?')">🗑️ Xóa</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>
+

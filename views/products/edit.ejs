@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+<h1>Sửa Sản phẩm</h1>
+<form action="/products/<%= product._id %>?_method=PUT" method="POST">
+  <label>Tên: <input name="name" value="<%= product.name %>" required /></label><br/>
+  <label>Địa chỉ: <input name="address" value="<%= product.address %>" /></label><br/>
+  <label>SĐT: <input name="phone" value="<%= product.phone %>" /></label><br/>
+  <label>Nhà cung cấp:
+    <select name="supplierId" required>
+      <% suppliers.forEach(s => { %>
+        <option value="<%= s._id %>" <%= s._id.toString() === product.supplierId.toString() ? "selected" : "" %>>
+          <%= s.name %>
+        </option>
+      <% }) %>
+    </select>
+  </label><br/>
+  <button type="submit">Cập nhật</button>
+</form>
+<%- include('../partials/footer') %>
+ 

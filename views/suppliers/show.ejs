@@ -1,0 +1,14 @@
+<%- include('../partials/header') %>
+<h1>Chi tiết Nhà cung cấp</h1>
+<p><b>Tên:</b> <%= supplier.name %></p>
+<p><b>Địa chỉ:</b> <%= supplier.address %></p>
+<p><b>SĐT:</b> <%= supplier.phone %></p>
+
+<h2>Sản phẩm thuộc nhà cung cấp này:</h2>
+<ul>
+  <% products.forEach(p => { %>
+    <li><a href="/products/<%= p._id %>"><%= p.name %></a></li>
+  <% }) %>
+</ul>
+<a href="/suppliers">⬅️ Quay lại danh sách</a>
+<%- include('../partials/footer') %>
