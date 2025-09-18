@@ -1,72 +1,72 @@
- 
 const Product = require('../models/product');
 const Supplier = require('../models/supplier');
 
-module.exports = {
-  index: async (req, res) => {
-    try {
-      const products = await Product.find().populate('supplierId').sort({ createdAt: -1 });
-      res.render('products/index', { products });
-    } catch (err) {
-      res.status(500).send('Error fetching products');
-    }
-  },
+// tất cả sản phẩm
+exports.index = async (req, res) => {
+  const products = await Product.find().populate('supplier');
+  const suppliers = await Supplier.find();
+  res.render('products/index', { products, suppliers });
+};
 
-  newForm: async (req, res) => {
-    try {
-      const suppliers = await Supplier.find();
-      res.render('products/new', { suppliers });
-    } catch (err) {
-      res.status(500).send('Error loading form');
-    }
-  },
+// form thêm sản phẩm
+exports.newForm = async (req, res) => {
+  const suppliers = await Supplier.find();
+  res.render('products/new', { suppliers });
+};
 
-  create: async (req, res) => {
-    try {
-      const { name, address, phone, supplierId } = req.body;
-      const product = new Product({ name, address, phone, supplierId });
-      await product.save();
-      res.redirect('/products');
-    } catch (err) {
-      res.status(500).send('Error creating product');
-    }
-  },
+// thêm sản phẩm
+exports.create = async (req, res) => {
+  const { name, price, quantity, supplier } = req.body;
+  await Product.create({ name, price, quantity, supplier });
+  res.redirect('/products');
+};
 
-  show: async (req, res) => {
-    try {
-      const product = await Product.findById(req.params.id).populate('supplierId');
-      res.render('products/show', { product });
-    } catch (err) {
-      res.status(500).send('Error showing product');
+// xem chi tiết
+exports.show = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).populate('supplier');
+    if (!product) {
+      return res.status(404).send('Không tìm thấy sản phẩm!');
     }
-  },
-
-  editForm: async (req, res) => {
-    try {
-      const product = await Product.findById(req.params.id);
-      const suppliers = await Supplier.find();
-      res.render('products/edit', { product, suppliers });
-    } catch (err) {
-      res.status(500).send('Error loading edit form');
-    }
-  },
-
-  update: async (req, res) => {
-    try {
-      const { name, address, phone, supplierId } = req.body;
-      await Product.findByIdAndUpdate(req.params.id, { name, address, phone, supplierId });
-      res.redirect('/products');
-    } catch (err) {
-      res.status(500).send('Error updating product');
-    }
-  },
-
-  remove: async (req, res) => {
-    try {
-      await Product.findByIdAndDelete(req.params.id);
-      res.redirect('/products');
-    } catch (err) {
-      res.status(500).send('Error deleting product');
-    }
+    res.render('products/show', { product });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Lỗi khi tải sản phẩm');
   }
+};
+
+
+// form sửa
+exports.editForm = async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  const suppliers = await Supplier.find();
+  res.render('products/edit', { product, suppliers });
+};
+
+// cập nhật
+exports.update = async (req, res) => {
+  const { name, price, quantity, supplier } = req.body;
+  await Product.findByIdAndUpdate(req.params.id, { name, price, quantity, supplier });
+  res.redirect('/products');
+};
+
+// xóa
+exports.delete = async (req, res) => {
+  await Product.findByIdAndDelete(req.params.id);
+  res.redirect('/products');
+};
+
+// tìm kiếm theo tên
+exports.search = async (req, res) => {
+  const q = req.query.q;
+  const products = await Product.find({ name: new RegExp(q, 'i') }).populate('supplier');
+  const suppliers = await Supplier.find();
+  res.render('products/index', { products, suppliers });
+};
+
+// lọc theo nhà cung cấp
+exports.bySupplier = async (req, res) => {
+  const products = await Product.find({ supplier: req.params.id }).populate('supplier');
+  const suppliers = await Supplier.find();
+  res.render('products/index', { products, suppliers });
 };

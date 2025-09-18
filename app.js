@@ -1,51 +1,58 @@
- require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const methodOverride = require('method-override');
-const bodyParser = require('body-parser');
-const path = require('path');
 const session = require('express-session');
-const flash = require('connect-flash');
+const methodOverride = require('method-override');
 
+const authRoutes = require('./routes/authRoutes');
 const supplierRoutes = require('./routes/supplierRoutes');
 const productRoutes = require('./routes/productRoutes');
 
+const Product = require('./models/product');
+const Supplier = require('./models/supplier');
+
 const app = express();
 
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/supplier_product_db';
-
-// Kết nối MongoDB
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(()=> console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connect error:', err));
-
-// Cấu hình view engine EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// middleware
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: process.env.SESSION_SECRET || 'secret', resave: false, saveUninitialized: true }));
-app.use(flash());
+app.use(session({
+  secret: 'secretkey',
+  resave: false,
+  saveUninitialized: false
+}));
 
-// Flash message
+// ⚡ luôn gán user vào res.locals để view nào cũng dùng được
 app.use((req, res, next) => {
-  res.locals.success = req.flash('success');
-  res.locals.error = req.flash('error');
+  res.locals.user = req.session.user || null;
   next();
 });
 
-// Routes
-app.get('/', (req, res) => res.redirect('/suppliers'));
+// ejs
+app.set('view engine', 'ejs');
+
+// routes
+app.use('/auth', authRoutes);
 app.use('/suppliers', supplierRoutes);
 app.use('/products', productRoutes);
 
-// 404 page
-app.use((req,res) => res.status(404).send('404 Not Found'));
+// home page
+app.get('/', async (req, res) => {
+  try {
+    const products = await Product.find().populate('supplier');
+    const suppliers = await Supplier.find();
+    res.render('index', { products, suppliers });
+  } catch (err) {
+    console.error(err);
+    res.send('Lỗi khi tải trang chủ');
+  }
+});
 
-// Start server
-app.listen(PORT, ()=> console.log(`Server running at http://localhost:${PORT}`));
+// connect MongoDB
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/supplier_product_db')
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(process.env.PORT || 3000, () => {
+      console.log('Server running at http://localhost:3000');
+    });
+  })
+  .catch(err => console.error(err));

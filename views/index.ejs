@@ -1,23 +1,24 @@
-<%- include('../partials/header') %>
+<%- include('partials/header') %>
 
-<h1>Danh sách Sản phẩm</h1>
+<h1>🏠 Trang chủ</h1>
 
-<!-- Tìm kiếm -->
+<!-- Form tìm kiếm -->
 <form method="GET" action="/products/search">
   <input type="text" name="q" placeholder="Tìm sản phẩm...">
   <button type="submit">🔍 Tìm</button>
 </form>
 
-<!-- Lọc theo nhà cung cấp -->
-<h3>Chọn theo nhà cung cấp:</h3>
+<!-- Lọc sản phẩm theo nhà cung cấp -->
+<h3>Lọc theo Nhà cung cấp:</h3>
 <ul>
   <% suppliers.forEach(s => { %>
     <li><a href="/products/by-supplier/<%= s._id %>"><%= s.name %></a></li>
   <% }) %>
 </ul>
 
-<a href="/products/new">➕ Thêm sản phẩm</a>
+<hr>
 
+<h2>📦 Danh sách sản phẩm</h2>
 <table border="1" cellpadding="6">
   <thead>
     <tr>
@@ -25,7 +26,6 @@
       <th>Giá</th>
       <th>Số lượng</th>
       <th>Nhà cung cấp</th>
-      <th>Hành động</th>
     </tr>
   </thead>
   <tbody>
@@ -35,15 +35,9 @@
         <td><%= p.price %></td>
         <td><%= p.quantity %></td>
         <td><%= p.supplier ? p.supplier.name : 'N/A' %></td>
-        <td>
-          <a href="/products/<%= p._id %>/edit">✏️ Sửa</a>
-          <form action="/products/<%= p._id %>/delete" method="POST" style="display:inline">
-            <button type="submit" onclick="return confirm('Bạn có chắc muốn xóa?')">🗑️ Xóa</button>
-          </form>
-        </td>
       </tr>
     <% }) %>
   </tbody>
 </table>
 
-<%- include('../partials/footer') %>
+<%- include('partials/footer') %>

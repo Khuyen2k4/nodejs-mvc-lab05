@@ -1,10 +1,16 @@
 <%- include('../partials/header') %>
+
 <h1>Danh sách Nhà cung cấp</h1>
+
 <a href="/suppliers/new">➕ Thêm nhà cung cấp</a>
+
 <table border="1" cellpadding="6">
   <thead>
     <tr>
-      <th>Tên</th><th>Địa chỉ</th><th>Số điện thoại</th><th>Hành động</th>
+      <th>Tên</th>
+      <th>Địa chỉ</th>
+      <th>Số điện thoại</th>
+      <th>Hành động</th>
     </tr>
   </thead>
   <tbody>
@@ -15,7 +21,7 @@
         <td><%= s.phone %></td>
         <td>
           <a href="/suppliers/<%= s._id %>/edit">✏️ Sửa</a>
-          <form action="/suppliers/<%= s._id %>?_method=DELETE" method="POST" style="display:inline">
+          <form action="/suppliers/<%= s._id %>/delete" method="POST" style="display:inline">
             <button type="submit" onclick="return confirm('Bạn có chắc muốn xóa?')">🗑️ Xóa</button>
           </form>
         </td>
@@ -23,5 +29,5 @@
     <% }) %>
   </tbody>
 </table>
-<%- include('../partials/footer') %>
 
+<%- include('../partials/footer') %>

@@ -1,14 +1,19 @@
 <%- include('../partials/header') %>
-<h1>Chi tiết Nhà cung cấp</h1>
-<p><b>Tên:</b> <%= supplier.name %></p>
-<p><b>Địa chỉ:</b> <%= supplier.address %></p>
-<p><b>SĐT:</b> <%= supplier.phone %></p>
 
-<h2>Sản phẩm thuộc nhà cung cấp này:</h2>
-<ul>
-  <% products.forEach(p => { %>
-    <li><a href="/products/<%= p._id %>"><%= p.name %></a></li>
-  <% }) %>
-</ul>
+<h2>🏭 Chi tiết Nhà cung cấp</h2>
+
+<p><strong>Tên:</strong> <%= supplier.name %></p>
+<p><strong>Địa chỉ:</strong> <%= supplier.address %></p>
+<p><strong>Số điện thoại:</strong> <%= supplier.phone %></p>
+
+<hr>
+
+<a href="/suppliers/<%= supplier._id %>/edit">✏️ Sửa</a>
+<form action="/suppliers/<%= supplier._id %>/delete" method="POST" style="display:inline">
+  <button type="submit" onclick="return confirm('Bạn có chắc muốn xóa?')">🗑️ Xóa</button>
+</form>
+
+<br><br>
 <a href="/suppliers">⬅️ Quay lại danh sách</a>
+
 <%- include('../partials/footer') %>

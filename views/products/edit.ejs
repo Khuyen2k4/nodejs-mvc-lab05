@@ -1,19 +1,29 @@
 <%- include('../partials/header') %>
-<h1>Sửa Sản phẩm</h1>
-<form action="/products/<%= product._id %>?_method=PUT" method="POST">
-  <label>Tên: <input name="name" value="<%= product.name %>" required /></label><br/>
-  <label>Địa chỉ: <input name="address" value="<%= product.address %>" /></label><br/>
-  <label>SĐT: <input name="phone" value="<%= product.phone %>" /></label><br/>
-  <label>Nhà cung cấp:
-    <select name="supplierId" required>
-      <% suppliers.forEach(s => { %>
-        <option value="<%= s._id %>" <%= s._id.toString() === product.supplierId.toString() ? "selected" : "" %>>
-          <%= s.name %>
-        </option>
-      <% }) %>
-    </select>
-  </label><br/>
-  <button type="submit">Cập nhật</button>
+
+<h2>✏️ Sửa sản phẩm</h2>
+
+<form action="/products/<%= product._id %>" method="POST">
+  <label>Tên sản phẩm:</label><br>
+  <input type="text" name="name" value="<%= product.name %>" required><br><br>
+
+  <label>Giá:</label><br>
+  <input type="number" name="price" value="<%= product.price %>" required><br><br>
+
+  <label>Số lượng:</label><br>
+  <input type="number" name="quantity" value="<%= product.quantity %>" required><br><br>
+
+  <label>Nhà cung cấp:</label><br>
+  <select name="supplier" required>
+    <% suppliers.forEach(s => { %>
+      <option value="<%= s._id %>" <%= product.supplier && product.supplier.equals(s._id) ? 'selected' : '' %>>
+        <%= s.name %>
+      </option>
+    <% }) %>
+  </select><br><br>
+
+  <button type="submit">💾 Cập nhật</button>
 </form>
+
+<a href="/products">⬅️ Quay lại</a>
+
 <%- include('../partials/footer') %>
- 

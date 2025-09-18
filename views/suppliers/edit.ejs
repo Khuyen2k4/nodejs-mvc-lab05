@@ -1,10 +1,20 @@
 <%- include('../partials/header') %>
-<h1>Sửa Nhà cung cấp</h1>
-<form action="/suppliers/<%= supplier._id %>?_method=PUT" method="POST">
-  <label>Tên: <input name="name" value="<%= supplier.name %>" required /></label><br/>
-  <label>Địa chỉ: <input name="address" value="<%= supplier.address %>" /></label><br/>
-  <label>Số điện thoại: <input name="phone" value="<%= supplier.phone %>" /></label><br/>
-  <button type="submit">Cập nhật</button>
-</form>
-<%- include('../partials/footer') %>
 
+<h2>✏️ Sửa Nhà cung cấp</h2>
+
+<form action="/suppliers/<%= supplier._id %>" method="POST">
+  <label>Tên nhà cung cấp:</label><br>
+  <input type="text" name="name" value="<%= supplier.name %>" required><br><br>
+
+  <label>Địa chỉ:</label><br>
+  <input type="text" name="address" value="<%= supplier.address %>"><br><br>
+
+  <label>Số điện thoại:</label><br>
+  <input type="text" name="phone" value="<%= supplier.phone %>"><br><br>
+
+  <button type="submit">💾 Cập nhật</button>
+</form>
+
+<a href="/suppliers">⬅️ Quay lại</a>
+
+<%- include('../partials/footer') %>

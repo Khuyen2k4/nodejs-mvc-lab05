@@ -1,10 +1,20 @@
 <%- include('../partials/header') %>
-<h1>Chi tiết Sản phẩm</h1>
-<p><b>Tên:</b> <%= product.name %></p>
-<p><b>Địa chỉ:</b> <%= product.address %></p>
-<p><b>SĐT:</b> <%= product.phone %></p>
-<p><b>Nhà cung cấp:</b> <%= product.supplierId ? product.supplierId.name : 'N/A' %></p>
 
+<h2>📦 Chi tiết sản phẩm</h2>
+
+<p><strong>Tên sản phẩm:</strong> <%= product.name %></p>
+<p><strong>Giá:</strong> <%= product.price %></p>
+<p><strong>Số lượng:</strong> <%= product.quantity %></p>
+<p><strong>Nhà cung cấp:</strong> <%= product.supplier ? product.supplier.name : 'N/A' %></p>
+
+<hr>
+
+<a href="/products/<%= product._id %>/edit">✏️ Sửa</a>
+<form action="/products/<%= product._id %>/delete" method="POST" style="display:inline">
+  <button type="submit" onclick="return confirm('Bạn có chắc muốn xóa?')">🗑️ Xóa</button>
+</form>
+
+<br><br>
 <a href="/products">⬅️ Quay lại danh sách</a>
+
 <%- include('../partials/footer') %>
- 
